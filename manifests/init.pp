@@ -9,6 +9,7 @@ class rhsm_only (
     recurse => true,
     purge   => true,
     require => File["${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}"],
+    stage   => 'setup',
   }
 
   file {"${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}":
@@ -16,11 +17,13 @@ class rhsm_only (
     mode   => '0644',
     owner  => 'root',
     group  => 'root',
+    stage  => 'setup',
   }
 
   if $::rhsm_only::repodir_immutable {
     exec {"chattr +i ${::rhsm_only::repodir}":
       unless  => "lsattr -d ${::rhsm_only::repodir} | sed -e 's/-/:/g' | grep '::i::'",
       require => File[$::rhsm_only::repodir],
+      stage   => 'setup',
     }
   }
