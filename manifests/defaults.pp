@@ -1,6 +1,6 @@
 # Default parameters
 class rhsm_only::defaults {
- case $::osfamily {
+  case $::osfamily {
     'RedHat', 'CentOS', 'Scientific', 'Fedora': {
       $repodir = '/etc/yum.repos.d'
       $rhsm_repofile = 'redhat.repo'

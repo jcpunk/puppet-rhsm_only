@@ -4,7 +4,7 @@ class rhsm_only (
   $repodir_immutable = $::rhsm_only::defaults::repodir_immutable,
 ) inherits ::rhsm_only::defaults {
 
-  file {${::rhsm_only::repodir}:
+  file {$::rhsm_only::repodir:
     ensure  => directory,
     recurse => true,
     purge   => true,
@@ -21,6 +21,6 @@ class rhsm_only (
   if $::rhsm_only::repodir_immutable {
     exec {"chattr +i ${::rhsm_only::repodir}":
       unless  => "lsattr -d ${::rhsm_only::repodir} | sed -e 's/-/:/g' | grep '::i::'",
-      require => File[${::rhsm_only::repodir}],
+      require => File[$::rhsm_only::repodir],
     }
   }
