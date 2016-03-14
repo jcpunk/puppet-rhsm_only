@@ -1,9 +1,6 @@
 # Default parameters
 class rhsm_only::defaults {
-  include stdlib
-
-  # this stage comes from stdlib
-  $run_stage = 'setup'
+  $run_stage = 'main'
 
   case $::osfamily {
     'RedHat', 'CentOS', 'Scientific', 'Fedora': {
