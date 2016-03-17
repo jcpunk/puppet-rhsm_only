@@ -1,6 +1,6 @@
 {
   "name": "jcpunk-rhsm_only",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "Pat Riehecky <riehecky@fnal.gov>",
   "summary": "Ensures the only file in /etc/yum.repos.d/ is redhat.repo",
   "license": "GPL-3.0+",
