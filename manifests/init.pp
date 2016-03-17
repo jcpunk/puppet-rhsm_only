@@ -11,27 +11,6 @@ class rhsm_only (
   validate_bool($repodir_immutable)
   validate_string($run_stage)
 
-  file {$::rhsm_only::repodir:
-    ensure  => directory,
-    recurse => true,
-    purge   => true,
-    require => File["${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}"],
-    stage   => $run_stage,
-  }
+  class { 'rhsm_only::stage': stage => $run_stage }
 
-  file {"${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}":
-    ensure => present,
-    mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
-    stage  => $run_stage,
-  }
-
-  if $::rhsm_only::repodir_immutable {
-    exec {"chattr +i ${::rhsm_only::repodir}":
-      unless  => "lsattr -d ${::rhsm_only::repodir} | sed -e 's/-/:/g' | grep '::i::'",
-      require => File[$::rhsm_only::repodir],
-      stage   => $run_stage,
-    }
-  }
 }
