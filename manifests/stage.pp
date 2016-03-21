@@ -21,6 +21,7 @@ class rhsm_only::stage {
 
   if $::rhsm_only::repodir_immutable {
     exec {"chattr +i ${::rhsm_only::repodir}":
+      path    => '/usr/bin/:/bin/:/sbin:/usr/sbin',
       unless  => "lsattr -d ${::rhsm_only::repodir} | sed -e 's/-/:/g' | grep '::i::'",
       require => File[$::rhsm_only::repodir],
     }

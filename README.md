@@ -7,10 +7,13 @@ A puppet module that removes any yum repo not provided in
 
 [*repodir*]
    /etc/yum.repos.d/
+
 [*rhsm_repofile*]
    redhat.repo
+
 [*repodir_immutable*]
    Should I set /etc/yum.repos.d/ so no one can write there?
+
 [*run_stage*]
    At which puppet stage should I run, defaults to main.
    I suggest 'setup' from stdlib
