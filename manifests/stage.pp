@@ -15,8 +15,6 @@ class rhsm_only::stage {
   file {"${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}":
     ensure => present,
     mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
   }
 
   if $::rhsm_only::repodir_immutable {
