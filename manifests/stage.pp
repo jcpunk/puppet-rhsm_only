@@ -15,6 +15,13 @@ class rhsm_only::stage {
   file {"${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}":
     ensure => present,
     mode   => '0644',
+    notify => Exec['chown redhat.repo'],
+  }
+
+  exec {'chown redhat.repo':
+    path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+    command     => "chown root:root ${::rhsm_only::repodir}/${::rhsm_only::rhsm_repofile}",
+    refreshonly => true,
   }
 
   if $::rhsm_only::repodir_immutable {
