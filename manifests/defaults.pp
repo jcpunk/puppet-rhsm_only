@@ -12,4 +12,9 @@ class rhsm_only::defaults {
       fail("${::operatingsystem} not supported")
     }
   }
+
+  $certs_dir   = '/etc/pki/entitlement'
+  $certs_mode  = '0640'
+  $certs_owner = 'root'
+  $certs_group = 'wheel'
 }
