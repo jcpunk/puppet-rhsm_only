@@ -18,6 +18,19 @@ A puppet module that removes any yum repo not provided in
    At which puppet stage should I run, defaults to main.
    I suggest 'setup' from stdlib
 
+[*certs_dir*]
+   /etc/pki/entitlement
+
+[*certs_mode*]
+   What are the permissions on the certs?
+   Defaults to allow owner and group read access.
+
+[*certs_owner*]
+   This should probably stay as 'root'
+
+[*certs_group*]
+   What group owns the certs, defaults to 'wheel'
+
 === Examples
     include rhsm_only
     
@@ -25,6 +38,10 @@ A puppet module that removes any yum repo not provided in
       repodir           => '/etc/yum.repos.d',
       rhsm_repofile     => 'redhat.repo',
       repodir_immutable => true,
-      run_stage         => 'setup',
+      stage             => 'setup',
+      certs_dir         => '/etc/pki/entitlement',
+      certs_mode        => '0644',
+      certs_owner       => 'root',
+      certs_group       => 'wheel',
     }
 
