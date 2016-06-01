@@ -1,6 +1,6 @@
 # Default parameters
 class rhsm_only::defaults {
-  $run_stage = 'main'
+  $stage = 'main'
 
   case $::osfamily {
     'RedHat', 'CentOS', 'Scientific', 'Fedora': {
