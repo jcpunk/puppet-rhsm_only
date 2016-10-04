@@ -1,11 +1,11 @@
 # Default parameters
 class rhsm_only::defaults {
-  $stage = 'main'
+  $before_packages = true
 
   case $::osfamily {
     'RedHat', 'CentOS', 'Scientific', 'Fedora': {
-      $repodir = '/etc/yum.repos.d'
-      $rhsm_repofile = 'redhat.repo'
+      $repodir           = '/etc/yum.repos.d'
+      $rhsm_repofile     = 'redhat.repo'
       $repodir_immutable = false
     }
     default: {
@@ -17,4 +17,5 @@ class rhsm_only::defaults {
   $certs_mode  = '0640'
   $certs_owner = 'root'
   $certs_group = 'wheel'
+
 }

@@ -3,22 +3,28 @@ class rhsm_only (
   $repodir           = $::rhsm_only::defaults::repodir,
   $rhsm_repofile     = $::rhsm_only::defaults::rhsm_repofile,
   $repodir_immutable = $::rhsm_only::defaults::repodir_immutable,
-  $stage             = $::rhsm_only::defaults::stage,
   $certs_dir         = $::rhsm_only::defaults::certs_dir,
   $certs_mode        = $::rhsm_only::defaults::certs_mode,
   $certs_owner       = $::rhsm_only::defaults::certs_owner,
   $certs_group       = $::rhsm_only::defaults::certs_group,
+  $before_packages   = $::rhsm_only::defaults::before_packages,
 
 ) inherits ::rhsm_only::defaults {
 
   validate_absolute_path($repodir)
   validate_string($rhsm_repofile)
   validate_bool($repodir_immutable)
-  validate_string($stage)
   validate_absolute_path($certs_dir)
   validate_string($certs_mode)
   validate_string($certs_owner)
   validate_string($certs_group)
+  validate_bool($before_packages)
+
+  if $before_packages {
+    Package {
+      require => File[$repodir],
+    }
+  }
 
   file {$certs_dir:
     ensure  => directory,
