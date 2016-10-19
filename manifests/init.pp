@@ -76,11 +76,7 @@ class rhsm_only (
     if $repodir_immutable {
       Exec['yum -y update yum'] {
         notify => Exec["chattr +i ${repodir}"],
-        before => [ Exec["chattr +i ${repodir}"], File[$repodir],],
-      }
-    } else {
-      Exec['yum -y update yum'] {
-        before => File[$repodir],
+        before => Exec["chattr +i ${repodir}"],
       }
     }
   }
@@ -90,7 +86,12 @@ class rhsm_only (
       path   => '/usr/bin/:/bin/:/sbin:/usr/sbin',
       onlyif => "yum list updates ${release_rpm} && chattr -i ${repodir}",
     }
-    if $repodir_immutable {
+    if $repodir_immutable and $manage_yum_rpm {
+      Exec["yum -y update ${release_rpm}"] {
+        notify => Exec["chattr +i ${repodir}"],
+        before => [ Exec["chattr +i ${repodir}"], Exec['yum -y update yum'], File[$repodir],],
+      }
+    } elsif $repodir_immutable {
       Exec["yum -y update ${release_rpm}"] {
         notify => Exec["chattr +i ${repodir}"],
         before => [ Exec["chattr +i ${repodir}"], File[$repodir],],
