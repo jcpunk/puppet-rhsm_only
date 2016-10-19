@@ -28,20 +28,31 @@ A puppet module that removes any yum repo not provided in
    What group owns the certs, defaults to 'wheel'
 
 [*before_packages*]
-   What group owns the certs, defaults to 'wheel'
+   setup Package to be after we set repos
 
+[*manage_yum_rpm*]
+   Ensure yum is up to date.  Required if using repodir_immutable
+
+[*manage_release_rpm*]
+   Ensure release rpm is up to date.  Required if using repodir_immutable
+
+[*release_rpm*]
+   Name of your release rpm
 
 === Examples
     include rhsm_only
     
     class { 'rhsm_only':
-      repodir           => '/etc/yum.repos.d',
-      rhsm_repofile     => 'redhat.repo',
-      repodir_immutable => true,
-      certs_dir         => '/etc/pki/entitlement',
-      certs_mode        => '0644',
-      certs_owner       => 'root',
-      certs_group       => 'wheel',
-      before_packages   => true,
+      repodir            => '/etc/yum.repos.d',
+      rhsm_repofile      => 'redhat.repo',
+      repodir_immutable  => true,
+      certs_dir          => '/etc/pki/entitlement',
+      certs_mode         => '0644',
+      certs_owner        => 'root',
+      certs_group        => 'wheel',
+      before_packages    => true,
+      manage_yum_rpm     => true,
+      manage_release_rpm => false,
+      release_rpm        => 'redhat-release',
     }
 
