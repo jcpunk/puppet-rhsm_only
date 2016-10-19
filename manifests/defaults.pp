@@ -13,7 +13,7 @@ class rhsm_only::defaults {
     }
   }
 
-  $manage_release_rpm = true
+  $manage_release_rpm = false
   $manage_yum_rpm     = true
 
   $release_rpm = $::operatingsystem ? {

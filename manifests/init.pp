@@ -62,9 +62,9 @@ class rhsm_only (
 
   if $repodir_immutable {
     exec {"chattr +i ${repodir}":
-      path   => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      unless => "/usr/bin/lsattr -d ${repodir} | /bin/sed -e 's/-/:/g' | /bin/grep '::i::'",
-      before => File[$repodir],
+      path    => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      unless  => "/usr/bin/lsattr -d ${repodir} | /bin/sed -e 's/-/:/g' | /bin/grep '::i::'",
+      require => File[$repodir],
     }
   }
 
