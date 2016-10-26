@@ -13,8 +13,16 @@ class rhsm_only::defaults {
     }
   }
 
-  $manage_release_rpm = false
+  $manage_release_rpm = true
   $manage_yum_rpm     = true
+
+  if $::operatingsystemmajrelease > 24 {
+    $yum_rpm = 'dnf'
+  } elsif $::operatingsystemmajrelease > 7 {
+    $yum_rpm = 'dnf'
+  } else {
+    $yum_rpm = 'dnf'
+  }
 
   $release_rpm = $::operatingsystem ? {
     /RedHat/     => 'redhat-release-server',

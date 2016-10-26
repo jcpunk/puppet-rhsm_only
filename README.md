@@ -33,6 +33,9 @@ A puppet module that removes any yum repo not provided in
 [*manage_yum_rpm*]
    Ensure yum is up to date.  Required if using repodir_immutable
 
+[*yum_rpm*]
+   Name of package containing yum/dnf (should default just fine)
+
 [*manage_release_rpm*]
    Ensure release rpm is up to date.  Required if using repodir_immutable
 

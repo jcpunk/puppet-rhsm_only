@@ -9,9 +9,9 @@ class rhsm_only (
   $certs_group        = $::rhsm_only::defaults::certs_group,
   $before_packages    = $::rhsm_only::defaults::before_packages,
   $manage_yum_rpm     = $::rhsm_only::defaults::manage_yum_rpm,
+  $yum_rpm            = $::rhsm_only::defaults::yum_rpm,
   $manage_release_rpm = $::rhsm_only::defaults::manage_release_rpm,
   $release_rpm        = $::rhsm_only::defaults::release_rpm,
-
 ) inherits ::rhsm_only::defaults {
 
   validate_absolute_path($repodir)
@@ -23,6 +23,7 @@ class rhsm_only (
   validate_string($certs_group)
   validate_bool($before_packages)
   validate_bool($manage_yum_rpm)
+  validate_string($yum_rpm)
   validate_bool($manage_release_rpm)
   validate_string($release_rpm)
 
@@ -69,12 +70,12 @@ class rhsm_only (
   }
 
   if $manage_yum_rpm {
-    exec {'yum -y update yum':
+    exec {"${yum_rpm} -y update ${yum_rpm}":
       path   => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      onlyif => "yum list updates yum && chattr -i ${repodir}",
+      onlyif => "${yum_rpm} list updates ${yum_rpm} && chattr -i ${repodir}",
     }
     if $repodir_immutable {
-      Exec['yum -y update yum'] {
+      Exec["${yum_rpm} -y update ${yum_rpm}"] {
         notify => Exec["chattr +i ${repodir}"],
         before => Exec["chattr +i ${repodir}"],
       }
@@ -82,22 +83,24 @@ class rhsm_only (
   }
 
   if $manage_release_rpm {
-    exec {"yum -y update ${release_rpm}":
-      path   => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      onlyif => "yum list updates ${release_rpm} && chattr -i ${repodir}",
+    # subscription manager may not be fully setup yet, so make sure to exit 0
+    exec {"${yum_rpm} -y update ${release_rpm}":
+      command => "${yum_rpm} -y update ${release_rpm} ; rm -f ${repodir}/* ; subscription-manager refresh; subscription-manager repos > /dev/null; exit 0",
+      path    => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      onlyif  => "${yum_rpm} list updates ${release_rpm} && chattr -i ${repodir}",
     }
     if $repodir_immutable and $manage_yum_rpm {
-      Exec["yum -y update ${release_rpm}"] {
+      Exec["${yum_rpm} -y update ${release_rpm}"] {
         notify => Exec["chattr +i ${repodir}"],
-        before => [ Exec["chattr +i ${repodir}"], Exec['yum -y update yum'], File[$repodir],],
+        before => [ Exec["chattr +i ${repodir}"], Exec["${yum_rpm} -y update ${yum_rpm}"], File[$repodir],],
       }
     } elsif $repodir_immutable {
-      Exec["yum -y update ${release_rpm}"] {
+      Exec["${yum_rpm} -y update ${release_rpm}"] {
         notify => Exec["chattr +i ${repodir}"],
         before => [ Exec["chattr +i ${repodir}"], File[$repodir],],
       }
     } else {
-      Exec["yum -y update ${release_rpm}"] {
+      Exec["${yum_rpm} -y update ${release_rpm}"] {
         before => File[$repodir],
       }
     }
