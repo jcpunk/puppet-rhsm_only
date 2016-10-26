@@ -21,7 +21,7 @@ class rhsm_only::defaults {
   } elsif $::operatingsystemmajrelease > 7 {
     $yum_rpm = 'dnf'
   } else {
-    $yum_rpm = 'dnf'
+    $yum_rpm = 'yum'
   }
 
   $release_rpm = $::operatingsystem ? {
