@@ -28,6 +28,7 @@ class rhsm_only::defaults {
     /Scientific/ => $::lsbdistid ? {
                         /ScientificFermi/ => 'slf-release',
                         /Scientific/      => 'sl-release',
+                        default           => 'sl-release',
                       },
     /Fedora/     => 'fedora-release',
   }
