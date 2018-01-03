@@ -16,12 +16,10 @@ class rhsm_only::defaults {
   $manage_release_rpm = true
   $manage_yum_rpm     = true
 
-  if $::operatingsystemmajrelease > 24 {
-    $yum_rpm = 'dnf'
-  } elsif $::operatingsystemmajrelease > 7 {
-    $yum_rpm = 'dnf'
-  } else {
+  if versioncmp($::operatingsystemmajrelease, '8') < 0 {
     $yum_rpm = 'yum'
+  } else {
+    $yum_rpm = 'dnf'
   }
 
   $release_rpm = $::operatingsystem ? {
