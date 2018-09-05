@@ -7,6 +7,9 @@ class rhsm_only (
   $certs_mode         = $::rhsm_only::defaults::certs_mode,
   $certs_owner        = $::rhsm_only::defaults::certs_owner,
   $certs_group        = $::rhsm_only::defaults::certs_group,
+  $repo_mode          = $::rhsm_only::defaults::repo_mode,
+  $repo_owner         = $::rhsm_only::defaults::repo_owner,
+  $repo_group         = $::rhsm_only::defaults::repo_group,
   $before_packages    = $::rhsm_only::defaults::before_packages,
   $manage_yum_rpm     = $::rhsm_only::defaults::manage_yum_rpm,
   $yum_rpm            = $::rhsm_only::defaults::yum_rpm,
@@ -21,6 +24,9 @@ class rhsm_only (
   validate_string($certs_mode)
   validate_string($certs_owner)
   validate_string($certs_group)
+  validate_string($repo_mode)
+  validate_string($repo_owner)
+  validate_string($repo_group)
   validate_bool($before_packages)
   validate_bool($manage_yum_rpm)
   validate_string($yum_rpm)
@@ -40,6 +46,7 @@ class rhsm_only (
     owner   => $certs_owner,
     group   => $certs_group,
     mode    => $certs_mode,
+    seluser => 'unconfined_u',
   }
 
   file {$repodir:
@@ -51,13 +58,13 @@ class rhsm_only (
 
   file {"${repodir}/${rhsm_repofile}":
     ensure => present,
-    mode   => '0644',
+    mode   => $repo_mode,
     notify => Exec['chown redhat.repo'],
   }
 
   exec {'chown redhat.repo':
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-    command     => "chown root:root ${repodir}/${rhsm_repofile}",
+    command     => "chown ${repo_owner}:${repo_group} ${repodir}/${rhsm_repofile}",
     refreshonly => true,
   }
 

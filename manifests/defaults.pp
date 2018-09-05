@@ -38,4 +38,8 @@ class rhsm_only::defaults {
   $certs_owner = 'root'
   $certs_group = 'wheel'
 
+  $repo_mode   = '0644'
+  $repo_owner  = 'root'
+  $repo_group  = 'root'
+
 }
